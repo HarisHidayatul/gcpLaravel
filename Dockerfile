@@ -14,7 +14,15 @@ RUN docker-php-ext-install pdo_mysql mbstring
 
 WORKDIR /app
 COPY composer.json .
-RUN composer install --no-scripts
 COPY . .
+RUN cp .env.example .env
+
+ENV DB_HOST 34.128.93.116
+ENV DB_DATABASE testDatabase
+ENV DB_USERNAME root
+
+RUN composer install --no-interaction --no-dev --prefer-dist
+
+RUN php artisan key:generate
 
 CMD php artisan serve --host=0.0.0.0 --port 80
