@@ -25,6 +25,4 @@ RUN composer install --no-interaction --no-dev --prefer-dist
 
 RUN php artisan key:generate
 
-RUN --env DB_HOST=34.128.93.116 --env DB_DATABASE=lazizaa_data_lake --env DB_USERNAME=root
-
 CMD php artisan serve --host=0.0.0.0 --port 80
