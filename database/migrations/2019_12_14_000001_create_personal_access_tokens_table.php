@@ -33,5 +33,14 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('personal_access_tokens');
+        
+        Schema::dropIfExists('sinkronisasi_transaksi_bee_cloud');
+        Schema::dropIfExists('detail_transaksi_bee_cloud');
+        Schema::dropIfExists('transaksi_bee_cloud');
+        Schema::dropIfExists('list_item_bee_cloud');
+        Schema::dropIfExists('satuan');
+        Schema::dropIfExists('list_sales');
+        Schema::dropIfExists('doutlet');
+        Schema::dropIfExists('tanggal_all');
     }
 };

@@ -18,7 +18,7 @@ COPY . .
 RUN cp .env.example .env
 
 ENV DB_HOST 34.128.93.116
-ENV DB_DATABASE testDatabase
+ENV DB_DATABASE lazizaa_data_lake
 ENV DB_USERNAME root
 
 RUN composer install --no-interaction --no-dev --prefer-dist

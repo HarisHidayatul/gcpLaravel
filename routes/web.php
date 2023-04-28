@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api_bee_cloud_controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/refreshSatuan',[api_bee_cloud_controller::class,'getSatuanBee']);
+Route::get('/refreshItem',[api_bee_cloud_controller::class,'getItemBee']);
+Route::get('/refreshTransaksi',[api_bee_cloud_controller::class,'getAllTransaction']);
+Route::get('/sinkronTransaksi',[api_bee_cloud_controller::class,'sinkronisasiTransaksi']);
