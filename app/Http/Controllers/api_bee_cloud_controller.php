@@ -40,7 +40,8 @@ class api_bee_cloud_controller extends Controller
         $urlGetTransaksi = 'https://private-anon-b3487e89e5-beecloud.apiary-proxy.com/api/v1/sale';
         $data = file_get_contents($urlGetTransaksi, false, $this->context);
         $result = json_decode($data);
-        // print_r(json_encode($result));
+        // @dd(json_encode($result));
+        // @dd($result);
 
         //Dapatkan semua list_sales dan masukkan ke variabel $listSalesAll dengan format (id_channel_bee_cloud,id)
         $listSalesAll = [];
@@ -74,9 +75,11 @@ class api_bee_cloud_controller extends Controller
             ]);
         }
 
+        // @dd($result);
         //Lakukan looping untuk semua transaksi, dan jangan dimasukkan ke database jika data tersebut sudah ada
         foreach ($result->data as $item) {
             //Cari didalam transaksi ada atau tidak data untuk id tertentu berdasarkan id transaksi dalam bee cloud
+            // @dd($item);
             if ($lastTransaksi != null) {
                 if ($lastTransaksi->id_transaksi_bee_cloud >=  $item->id) {
                     continue;
@@ -134,6 +137,8 @@ class api_bee_cloud_controller extends Controller
                 'updated_at' => Carbon::now()
             ]);
         }
+        // $allDataInsertTransaksi = array_chunk($allDataInsertTransaksi,10);
+        $allDataInsertTransaksi = array_slice($allDataInsertTransaksi, 0, 100);
         // @dd($allDataInsertTransaksi);
         transaksi_bee_cloud::insert($allDataInsertTransaksi);
         echo 'Success update transaction';
