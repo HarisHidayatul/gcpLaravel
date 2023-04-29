@@ -43,14 +43,14 @@ class api_bee_cloud_controller extends Controller
         // @dd(json_encode($result));
         // @dd($result);
 
-        //Dapatkan semua list_sales dan masukkan ke variabel $listSalesAll dengan format (id_channel_bee_cloud,id)
-        $listSalesAll = [];
-        $list_sales = list_sales::all();
-        for ($i = 0; $i < $list_sales->count(); $i++) {
-            $listSalesTemp = [];
-            array_push($listSalesTemp, $list_sales[$i]->id_channel_bee_cloud, $list_sales[$i]->id);
-            array_push($listSalesAll, $listSalesTemp);
-        }
+        // //Dapatkan semua list_sales dan masukkan ke variabel $listSalesAll dengan format (id_channel_bee_cloud,id)
+        // $listSalesAll = [];
+        // $list_sales = list_sales::all();
+        // for ($i = 0; $i < $list_sales->count(); $i++) {
+        //     $listSalesTemp = [];
+        //     array_push($listSalesTemp, $list_sales[$i]->id_channel_bee_cloud, $list_sales[$i]->id);
+        //     array_push($listSalesAll, $listSalesTemp);
+        // }
 
         //Dapatkan data dari akhir transaksi, ini merupakan acuan dasar dari id bee cloud saat akan masuk ke sistem
         $lastTransaksi = transaksi_bee_cloud::orderBy('id_transaksi_bee_cloud', 'DESC')->first();
@@ -154,8 +154,11 @@ class api_bee_cloud_controller extends Controller
         $lastIdTransaksi = transaksi_bee_cloud::orderBy('id', 'DESC')->first()->id;
         $listItemDB = list_item_bee_cloud::all();
         if ($sinkronTransaksi != null) {
-            $startIteration = $sinkronTransaksi->end_transaksi_id;
+            $startIteration = $sinkronTransaksi->skip + $sinkronTransaksi->take;
+        } else {
+            // $startIteration = transaksi_bee_cloud::orderBy('id', 'ASC')->first()->id;
         }
+        // @dd($startIteration);
         for ($i = $startIteration; $i < $lastIdTransaksi; $i = $i + $step) {
             $transaksiBeeClouds = transaksi_bee_cloud::skip($i)->take($step)->get();
             $countData = 0;
@@ -188,7 +191,7 @@ class api_bee_cloud_controller extends Controller
                             break;
                         }
                     }
-                    array_push($tempDataToSend,[
+                    array_push($tempDataToSend, [
                         'id_transaksi' => $temp_id_transaksi,
                         'id_list_item' => $temp_id_list_item,
                         'qty' => $temp_qty,
@@ -201,8 +204,8 @@ class api_bee_cloud_controller extends Controller
             detail_transaksi_bee_cloud::insert($tempDataToSend);
 
             $sinkronisasiTransaksi = new sinkronisasi_transaksi_bee_cloud();
-            $sinkronisasiTransaksi->start_transaksi_id = $i + 1;
-            $sinkronisasiTransaksi->end_transaksi_id = $i + $countData;
+            $sinkronisasiTransaksi->skip = $i;
+            $sinkronisasiTransaksi->take = $step;
             $sinkronisasiTransaksi->save();
         }
         echo 'Success update detail transaction';

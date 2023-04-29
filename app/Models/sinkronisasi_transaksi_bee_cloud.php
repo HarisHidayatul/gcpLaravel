@@ -13,8 +13,8 @@ class sinkronisasi_transaksi_bee_cloud extends Model
     protected $primaryKey = 'id';
     
     protected $fillable = [
-        'start_transaksi_id',
-        'end_transaksi_id',
+        'skip',
+        'take',
         'created_at',
         'updated_at',
         'deleted_at'

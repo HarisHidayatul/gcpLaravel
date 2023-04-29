@@ -79,11 +79,9 @@ return new class extends Migration
         Schema::create('sinkronisasi_transaksi_bee_cloud', function(Blueprint $table){
             $table->bigIncrements('id');
             
-            $table->unsignedBigInteger('start_transaksi_id');
-            $table->foreign('start_transaksi_id')->references('id')->on('transaksi_bee_cloud');
+            $table->unsignedBigInteger('skip');
             
-            $table->unsignedBigInteger('end_transaksi_id');
-            $table->foreign('end_transaksi_id')->references('id')->on('transaksi_bee_cloud');
+            $table->unsignedBigInteger('take');
             
             $table->timestamps();
         });
