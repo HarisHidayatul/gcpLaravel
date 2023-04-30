@@ -37,11 +37,12 @@ class api_bee_cloud_controller extends Controller
     public function getAllTransaction()
     {
         // $this->getItemBee();
-        $urlGetTransaksi = 'https://private-anon-b3487e89e5-beecloud.apiary-proxy.com/api/v1/sale';
+        $urlGetTransaksi = 'https://api.beecloud.id/api/v1/sale';
         $data = file_get_contents($urlGetTransaksi, false, $this->context);
         $result = json_decode($data);
-        // @dd(json_encode($result));
-        // @dd($result);
+        $result = collect($result->data)->sortBy('id');
+        // $result = collect($result);
+        // @dd($result->sortBy);
 
         // //Dapatkan semua list_sales dan masukkan ke variabel $listSalesAll dengan format (id_channel_bee_cloud,id)
         // $listSalesAll = [];
@@ -77,7 +78,7 @@ class api_bee_cloud_controller extends Controller
 
         // @dd($result);
         //Lakukan looping untuk semua transaksi, dan jangan dimasukkan ke database jika data tersebut sudah ada
-        foreach ($result->data as $item) {
+        foreach ($result as $item) {
             //Cari didalam transaksi ada atau tidak data untuk id tertentu berdasarkan id transaksi dalam bee cloud
             // @dd($item);
             if ($lastTransaksi != null) {
@@ -167,7 +168,7 @@ class api_bee_cloud_controller extends Controller
                 $countData = $countData + 1;
 
                 // URL API yang ingin diambil datanya
-                $urlData = 'https://private-anon-b3487e89e5-beecloud.apiary-proxy.com/api/v1/saled?';
+                $urlData = 'https://api.beecloud.id/api/v1/saled?';
                 $urlData .= 'sale_id=';
                 $urlData .= $transaksiBeeCloud->id_transaksi_bee_cloud;
                 $urlData .= '&';
@@ -216,7 +217,7 @@ class api_bee_cloud_controller extends Controller
         // $this->getSatuanBee();
         ///   Program Berikut Untuk Update Item Agar Sama Dengan Item Pada Bee Cloud ////
         // URL API yang ingin diambil datanya
-        $urlItem = 'https://private-anon-b3487e89e5-beecloud.apiary-proxy.com/api/v1/item';
+        $urlItem = 'https://api.beecloud.id/api/v1/item';
 
         // Mengambil data dari API dengan stream_context_create() dan file_get_contents()
         $data = file_get_contents($urlItem, false, $this->context);
@@ -304,7 +305,7 @@ class api_bee_cloud_controller extends Controller
     public function getSatuanBee()
     {
         ///   Program Berikut Untuk Update Satuan Agar Sama Dengan Unit Satuan Pada Bee Cloud ////
-        $urlSatuan = 'https://private-anon-d985942e71-beecloud.apiary-proxy.com/api/v1/unit';
+        $urlSatuan = 'https://api.beecloud.id/api/v1/unit';
         $data = file_get_contents($urlSatuan, false, $this->context);
         $result = json_decode($data);
 
